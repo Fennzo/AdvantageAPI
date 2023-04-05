@@ -1,0 +1,57 @@
+<h1>Click the button to view the chart of the commodity</h1>
+
+
+<h2>Commodities</h2>
+<h2>Technical indicators</h2>
+
+<nav>
+
+  <h2>Stock symbol</h2>
+
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="Stock symbol" [(ngModel)]="stock_symbol" [matAutocomplete]="auto1" (input)="symbol_search($event)">
+    <mat-autocomplete #auto1="matAutocomplete" >
+      <mat-option *ngFor="let result of stock_search_results" [value]="result.symbol">
+        <span>{{ result.symbol}}</span> |   <span>{{ result.name}}</span>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <button (click)="generate_stock_chart()" [routerLink]="'/data/' + stock_symbol">View</button>
+
+  <h2>Forex</h2>
+
+  <div style="display: flex;">
+    <mat-form-field class="example-full-width" style="margin-right: 16px;">
+      <input matInput placeholder="From currency" [(ngModel)]="from_currency" [matAutocomplete]="auto2" (input)="forex_search($event)">
+      <mat-autocomplete #auto2="matAutocomplete">
+        <mat-option *ngFor="let result of forex_search_result" [value]="result.code">
+          <span>{{ result.code}}</span> | <span>{{ result.name}}</span>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="To currency" [(ngModel)]="to_currency" [matAutocomplete]="auto3" (input)="forex_search($event)">
+      <mat-autocomplete #auto3="matAutocomplete">
+        <mat-option *ngFor="let result of forex_search_result" [value]="result.code">
+          <span>{{ result.code}}</span> | <span>{{ result.name}}</span>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <button (click)="generate_forex_chart()" [routerLink]="'/data/' + from_currency + 'to' + to_currency" >View</button>
+  </div>
+
+
+
+
+
+</nav>
+
+<div *ngIf="show_chart">
+  <app-chart [data]="chartData "></app-chart>
+  <app-chart [forex_data]="currency_info"></app-chart>
+</div>
+
+<router-outlet></router-outlet>
