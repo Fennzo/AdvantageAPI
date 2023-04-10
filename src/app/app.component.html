@@ -1,9 +1,5 @@
 <h1>Click the button to view the chart of the commodity</h1>
 
-
-<h2>Commodities</h2>
-<h2>Technical indicators</h2>
-
 <nav>
 
   <h2>Stock symbol</h2>
@@ -17,10 +13,7 @@
     </mat-autocomplete>
   </mat-form-field>
 
-  <button
-    (click)="generate_stock_chart()"
-          [routerLink]="'/data/' + stock_symbol">View
-  </button>
+  <button (click)="generate_stock_chart()">View</button>
 
   <h2>Forex</h2>
 
@@ -43,7 +36,7 @@
       </mat-autocomplete>
     </mat-form-field>
 
-    <button (click)="generate_forex_chart()" [routerLink]="'/data/' + from_currency + 'to' + to_currency" >View</button>
+    <button (click)="generate_forex_chart()"  >View</button>
   </div>
 
 
@@ -52,12 +45,12 @@
 
 </nav>
 
-<div *ngIf="stock_chart_data ">
-    <app-chart [stock_data]="stock_chart_data"></app-chart>
-</div>
+<!--<div *ngIf="stock_chart_data ">-->
+<!--    <app-chart [stock_data]="stock_chart_data"></app-chart>-->
+<!--</div>-->
 
-<div *ngIf="currency_show_chart">
-  <app-chart [forex_data]="currency_chart_data"></app-chart>
-</div>
+<!--<div *ngIf="currency_show_chart">-->
+<!--  <app-chart [forex_data]="currency_chart_data"></app-chart>-->
+<!--</div>-->
 
 <router-outlet></router-outlet>
