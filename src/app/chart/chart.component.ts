@@ -9,14 +9,19 @@ declare var google: any;
 })
 export class ChartComponent {
 
-  @Input() data: any;
+  @Input() stock_data: any;
   chart_name = '';
   timeSeriesData = [];
   @Input() forex_data: any;
   forex_info = '';
 
   constructor() {
-    this.initalize()
+    if(!this.stock_data)
+      return;
+    else{
+      console.log("constrcutor CALLED")
+      this.initalize()
+    }
   }
 
   initalize(): void {
@@ -46,18 +51,18 @@ export class ChartComponent {
 
   parseChartData(): any[] {
     const timeSeries = [];
-    console.log("data", this.data);
+    console.log("data", this.stock_data);
     console.log("forex_data", this.forex_data)
 
     // stock
-    if ('Time Series (5min)' in this.data){
-      this.chart_name = this.data["Meta Data"]["2. Symbol"] + ' stock price'
-    this.timeSeriesData = this.data['Time Series (5min)'];}
+    if ('Time Series (5min)' in this.stock_data){
+      this.chart_name = this.stock_data["Meta Data"]["2. Symbol"] + ' stock price'
+    this.timeSeriesData = this.stock_data['Time Series (5min)'];}
     // forex
-    else if ('Time Series FX (Daily)' in this.data){
-      this.forex_info = "1 " + this.data["Meta Data"]["2. From Symbol"] + " to " + this.data["Meta Data"]["3. To Symbol"] + this.forex_data["Realtime Currency Exchange Rate"]["5. Exchange Rate"] + " " + this.forex_data["Realtime Currency Exchange Rate"]["6. Last Refreshed"] + " " + this.forex_data["Realtime Currency Exchange Rate"]["7. Time Zone"]
-      this.chart_name = this.data["Meta Data"]["2. From Symbol"] + ' To ' + this.data["Meta Data"]["3. To Symbol"]
-      this.timeSeriesData = this.data['Time Series FX (Daily)'];
+    else if ('Time Series FX (Daily)' in this.stock_data){
+      this.forex_info = "1 " + this.stock_data["Meta Data"]["2. From Symbol"] + " to " + this.stock_data["Meta Data"]["3. To Symbol"] + this.forex_data["Realtime Currency Exchange Rate"]["5. Exchange Rate"] + " " + this.forex_data["Realtime Currency Exchange Rate"]["6. Last Refreshed"] + " " + this.forex_data["Realtime Currency Exchange Rate"]["7. Time Zone"]
+      this.chart_name = this.stock_data["Meta Data"]["2. From Symbol"] + ' To ' + this.stock_data["Meta Data"]["3. To Symbol"]
+      this.timeSeriesData = this.stock_data['Time Series FX (Daily)'];
       console.log("forex_info", this.forex_info)
       console.log("chart_name", this.chart_name)
     }

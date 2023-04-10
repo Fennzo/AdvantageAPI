@@ -17,7 +17,10 @@
     </mat-autocomplete>
   </mat-form-field>
 
-  <button (click)="generate_stock_chart()" [routerLink]="'/data/' + stock_symbol">View</button>
+  <button
+    (click)="generate_stock_chart()"
+          [routerLink]="'/data/' + stock_symbol">View
+  </button>
 
   <h2>Forex</h2>
 
@@ -49,9 +52,12 @@
 
 </nav>
 
-<div *ngIf="show_chart">
-  <app-chart [data]="chartData "></app-chart>
-  <app-chart [forex_data]="currency_info"></app-chart>
+<div *ngIf="stock_chart_data ">
+    <app-chart [stock_data]="stock_chart_data"></app-chart>
+</div>
+
+<div *ngIf="currency_show_chart">
+  <app-chart [forex_data]="currency_chart_data"></app-chart>
 </div>
 
 <router-outlet></router-outlet>

@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Observable, of, shareReplay, tap} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -13,16 +14,18 @@ export class AppComponent implements OnInit{
   stock_search_url = 'SYMBOL_SEARCH&keywords=';
   stock_symbol = '';
   url = '';
-  api_key = '5QKIUHUZF5KPBKR8';
-  show_chart = false;
-  chartData: Object = [];
+  api_key = 'M4QG84LQ6MXGD3SF';
+  stock_show_chart = false;
+  currency_show_chart = false;
+  data_observer: Observable<any> = of(null);
+  stock_chart_data: Object = [];
   searchable = ''
   stock_search_results: any[] = [];
   forex_list: any[] = [];
   crypto_list: any[] = [];
   from_currency = ''
   to_currency = ''
-  currency_info :Object = [];
+  currency_chart_data :Object = [];
   forex_search_result: any[] = [];
 
   constructor(private http: HttpClient) { } // used to access the service methods
@@ -31,13 +34,16 @@ export class AppComponent implements OnInit{
    // console.log("generateStockUrl() called");
     this.url = this.starter_url + 'TIME_SERIES_INTRADAY&symbol=' + this.stock_symbol + '&interval=5min&apikey=' + this.api_key;
   //  console.log("URL", this.url)
-
-    this.http.get(this.url).subscribe((data) => {
-      this.chartData = data;
-      console.log("CHART DATA: ", this.chartData);
-      this.show_chart = true;
-
-  });
+  //
+  //   this.data_observer = this.http.get(this.url).pipe(
+  //     tap(data => this.stock_chart_data = data),
+  //     shareReplay(1)
+  //   );
+    this.http.get(this.url).subscribe(data => {
+      console.log("CHART DATA: ", data);
+      this.stock_chart_data = data;
+    });
+    console.log("stockchart", this.stock_chart_data)
 }
 
   forex_search(event: any) {
@@ -85,10 +91,11 @@ export class AppComponent implements OnInit{
       rows.shift()
       rows.map((row : any) => {
         const cols = row.split(',');
+        //console.log("trim", cols[1])
         this.forex_list.push({code: cols[0], name: cols[1].trim()})
       })
 
-      console.log("forex list", this.forex_list)
+      //console.log("forex list", this.forex_list)
     })
 
   }
@@ -98,15 +105,15 @@ export class AppComponent implements OnInit{
     const exchange_rate_url = this.starter_url + 'CURRENCY_EXCHANGE_RATE&from_currency=' + this.from_currency + '&to_currency=' + this.to_currency + '&apikey=' + this.api_key;
 
     this.http.get(chart_url).subscribe((data) => {
-      this.chartData = data;
-      console.log("CHART DATA: ", this.chartData);
+      this.currency_chart_data = data;
+      console.log("CHART DATA: ", this.data_observer);
 
     });
 
     this.http.get(exchange_rate_url).subscribe((data) => {
-      this.currency_info = data;
-      console.log("currency_info", this.currency_info)
-      this.show_chart = true;
+      this.currency_chart_data = data;
+      console.log("currency_info", this.currency_chart_data)
+      this.currency_show_chart = true;
 
     })
   }
